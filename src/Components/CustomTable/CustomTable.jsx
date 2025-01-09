@@ -8,6 +8,7 @@ const CustomTable = () => {
   const [tableData, setTableData] = useState([]);
   const [currentPage, setCurrentpage] = useState(1);
   const dataPerpage = 5;
+  const [searchData , setSearchData] = useState("");
 
   useEffect(() => {
     axios
@@ -15,14 +16,26 @@ const CustomTable = () => {
       .then((res) => res.data)
       .then((data) => setTableData(data.data));
   }, []);
+//   seacrh input funciton ----------------------------------------
+    const filteredData = tableData.filter((tdata)=> {
+      const dataName = `${tdata?.name || ""} ${tdata?.email || ""} ${
+          tdata?.email_verified_at || ""
+        } ${tdata?.created_at || ""} ${tdata?.updated_at || ""}`.toLowerCase() ;
+        return dataName.includes(searchData.toLowerCase());
+    })
 
+    // pagination function ------------------------------------
   const defaultPageNumber = (currentPage - 1) * dataPerpage;
-  const pageData = tableData.slice(defaultPageNumber, defaultPageNumber + dataPerpage);
+  const pageData = filteredData.slice(defaultPageNumber, defaultPageNumber + dataPerpage);
 
-  const totalPage = Math.ceil(tableData.length / dataPerpage);
+  const totalPage = Math.ceil(filteredData.length / dataPerpage);
 
   const handlepagination = (td) => {
     setCurrentpage(td);
+  };
+
+  const handleSearch = (e) => {
+    setSearchData(e.target.value);
   };
 
   return (
@@ -34,10 +47,13 @@ const CustomTable = () => {
       <div className="overflow-x-auto">
         {/* search section -------------------------------- */}
         <div className="bg-gray-200 px-2 py-4 border border-black">
-          <input className="py-1 drop-shadow-lg" type="text" value="" />
-          <button className="ms-3 bg-green-500 hover:bg-green-600 px-4 py-1 rounded-sm text-white uppercase drop-shadow-lg">
-            Search
-          </button>
+          <input 
+          className="py-1 px-2 drop-shadow-lg"
+           type="text" 
+           value={searchData}
+           onChange={handleSearch}
+            placeholder="search here"/>
+        
         </div>
 
         {/* Table --------------------------------- */}
