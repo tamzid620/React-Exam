@@ -8,7 +8,7 @@ const CustomTable = () => {
   const [tableData, setTableData] = useState([]);
   const [currentPage, setCurrentpage] = useState(1);
   const dataPerpage = 5;
-  const [searchData , setSearchData] = useState("");
+  const [searchData, setSearchData] = useState("");
 
   useEffect(() => {
     axios
@@ -16,17 +16,18 @@ const CustomTable = () => {
       .then((res) => res.data)
       .then((data) => setTableData(data.data));
   }, []);
-//   seacrh input funciton ----------------------------------------
-    const filteredData = tableData.filter((tdata)=> {
-      const dataName = `${tdata?.name || ""} ${tdata?.email || ""} ${
-          tdata?.email_verified_at || ""
-        } ${tdata?.created_at || ""} ${tdata?.updated_at || ""}`.toLowerCase() ;
-        return dataName.includes(searchData.toLowerCase());
-    })
+  //   seacrh input funciton ----------------------------------------
+  const filteredData = tableData.filter((tdata) => {
+    const dataName = `${tdata?.name || ""} ${tdata?.email || ""}`.toLowerCase();
+    return dataName.includes(searchData.toLowerCase());
+  });
 
-    // pagination function ------------------------------------
+  // pagination function ------------------------------------
   const defaultPageNumber = (currentPage - 1) * dataPerpage;
-  const pageData = filteredData.slice(defaultPageNumber, defaultPageNumber + dataPerpage);
+  const allPageData = filteredData.slice(
+    defaultPageNumber,
+    defaultPageNumber + dataPerpage
+  );
 
   const totalPage = Math.ceil(filteredData.length / dataPerpage);
 
@@ -47,13 +48,13 @@ const CustomTable = () => {
       <div className="overflow-x-auto">
         {/* search section -------------------------------- */}
         <div className="bg-gray-200 px-2 py-4 border border-black">
-          <input 
-          className="py-1 px-2 drop-shadow-lg"
-           type="text" 
-           value={searchData}
-           onChange={handleSearch}
-            placeholder="search here"/>
-        
+          <input
+            className="py-1 px-2 drop-shadow-lg w-64"
+            type="text"
+            value={searchData}
+            onChange={handleSearch}
+            placeholder="search via number, name or email"
+          />
         </div>
 
         {/* Table --------------------------------- */}
@@ -66,7 +67,7 @@ const CustomTable = () => {
             <th>created at</th>
             <th>updated at</th>
           </thead>
-          {pageData.map((tdata) => (
+          {allPageData.map((tdata) => (
             <tbody key={tdata?.id} className="leading-[50px] text-center">
               <td>{tdata?.id}</td>
               <td>{tdata?.name}</td>
