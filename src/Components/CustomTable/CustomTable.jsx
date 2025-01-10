@@ -63,12 +63,12 @@ const CustomTable = () => {
             <th className="text-[9px]">index</th>
             <th>name</th>
             <th>email</th>
-            <th>email verified at</th>
+            <th> verified at</th>
             <th>created at</th>
             <th>updated at</th>
           </thead>
           {allPageData.map((tdata) => (
-            <tbody key={tdata?.id} className="leading-[50px] text-center">
+            <tbody key={tdata?.id} className=" text-center">
               <td>{tdata?.id}</td>
               <td>{tdata?.name}</td>
               <td>{tdata?.email}</td>
